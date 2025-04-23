@@ -4,6 +4,7 @@ This repository contains the On2Cook AI server, which uses machine learning mode
 
 ## Features
 - **Pan Status Detection:** Determines if a pan is empty or not.
+- **Temperature Prediction:** Predicts the pan's temperature based on sensor data.
 - **Flask API:** A lightweight server to handle HTTP requests.
 - **Render Deployment:** Cloud-hosted inference using Render.
 - **ESP32 Integration:** Sends sensor data to the server and processes responses using FreeRTOS tasks.
@@ -14,6 +15,7 @@ This repository contains the On2Cook AI server, which uses machine learning mode
 
 ### Machine Learning Models
 - **`pan_classifier.pkl`**: A classification model that determines if the pan is empty or not.
+- **`temperature_predictor.pkl`**: A regression model that predicts the pan temperature.
 - **`scaler.pkl`**: A scaler to normalize input features before passing them to the models.
 
 ### Input Features
@@ -26,6 +28,7 @@ The models use the following sensor data:
 
 ### API Response
 - **`pan_status`**: "Not Empty" or "Empty"
+- **`temperature`**: Predicted temperature value
 
 ---
 

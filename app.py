@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Load models
 status_model = joblib.load("pan_classifier.pkl")
-# temp_model = joblib.load("temperature_predictor.pkl")
+temp_model = joblib.load("temperature_predictor.pkl")
 scaler = joblib.load("scaler.pkl")  # Load the scaler
 
 @app.route("/", methods=["GET"])
@@ -23,17 +23,16 @@ def detect_pan_status():
         features_scaled = scaler.transform(features)
         
         # Predict pan status
-        status = status_model.predict(features)[0]  # 1 (Empty) or 0 (Not Empty)
+        status = status_model.predict(features)[0]  # 0 (Empty) or 1 (Not Empty)
         
         # Predict temperature
-        temperature = temp_model.predict(features)[0]
+        #temperature = temp_model.predict(features)[0]
         
-        return jsonify({"pan_status": "Not Empty" if status == 0 else "Empty", "temperature": round(temperature, 2)})
+        return jsonify({"pan_status": "Not Empty" if status == 0 else "Empty"})
     
     except Exception as e:
         return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
-
 

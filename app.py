@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Load models
 status_model = joblib.load("pan_classifier.pkl")
-temp_model = joblib.load("temperature_predictor.pkl")
+# temp_model = joblib.load("temperature_predictor.pkl")
 scaler = joblib.load("scaler.pkl")  # Load the scaler
 
 @app.route("/", methods=["GET"])

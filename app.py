@@ -1,12 +1,13 @@
 from flask import Flask, request, jsonify
 import numpy as np
+import pandas as pd  # Add this import
 import joblib
-import pandas as pd
 
 app = Flask(__name__)
 
 # Load models
-model = joblib.load("best_model.pkl")
+status_model = joblib.load("pan_classifier.pkl")
+temp_model = joblib.load("temperature_predictor.pkl")
 scaler = joblib.load("scaler.pkl")
 
 @app.route("/", methods=["GET"])
@@ -16,28 +17,26 @@ def home():
 @app.route("/detect", methods=["POST"])
 def detect_pan_status():
     try:
-        # Get input data
         data = request.json
-        features = np.array([
-            data.get("PAN_Inside", 0),
-            data.get("PAN_Outside", 0),
-            data.get("Glass_Temp", 0)
-        ]).reshape(1, -1)
+        features = np.array(data["features"]).reshape(1, -1)
         
-        # Scale features
-        features_scaled = scaler.transform(features)
+        # Convert to DataFrame with feature names
+        feature_names = ['PAN_Inside:', 'PAN_Outside:', 'Glass_Temp:', 'Ind_Current:', 'Mag_Current:']
+        features_df = pd.DataFrame(features, columns=feature_names)
         
-        # Predict
-        prediction = model.predict(features_scaled)[0]
+        # Scale input features
+        features_scaled = scaler.transform(features_df)  # Use DataFrame instead of numpy array
         
-        # Return result
-        return jsonify({
-            "pan_status": "Empty" if prediction == 1 else "Not Empty",
-            "confidence": float(model.predict_proba(features_scaled).max())
-        })
+        # Predict pan status
+        status = status_model.predict(features_scaled)[0]
+        
+        # Predict temperature
+        #temperature = temp_model.predict(features_scaled)[0]
+        
+        return jsonify({"pan_status": "Not Empty" if status == 0 else "Empty"})
     
     except Exception as e:
         return jsonify({"error": str(e)})
 
-if _name_ == "__main__":
+if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

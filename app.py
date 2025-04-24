@@ -6,8 +6,8 @@ import pandas as pd
 app = Flask(__name__)
 
 # Load models
-model = joblib.load("models/best_model.pkl")
-scaler = joblib.load("models/scaler.pkl")
+model = joblib.load("best_model.pkl")
+scaler = joblib.load("scaler.pkl")
 
 @app.route("/", methods=["GET"])
 def home():

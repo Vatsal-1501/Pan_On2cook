@@ -20,7 +20,7 @@ def detect_pan_status():
         features = np.array(data["features"]).reshape(1, -1)
         
         # Convert to DataFrame with feature names
-        feature_names = ['PAN_Inside:', 'PAN_Outside:', 'Glass_Temp:']
+        feature_names = ['PAN_Inside:', 'PAN_Outside:', 'Glass_Temp:', 'Ind_Current:', 'Mag_Current:']
         features_df = pd.DataFrame(features, columns=feature_names)
         
         # Scale input features
